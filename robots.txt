@@ -4,7 +4,7 @@ User-agent: *
 Allow: /
 
 # Sitemap (Tu changeras l'URL quand tu auras ton domaine)
-Sitemap: https://toolmonsters.onrender.com/sitemap.xml
+Sitemap: https://website-zn28.onrender.com
 
 # Block common bad bots (optionnel)
 User-agent: AhrefsBot
