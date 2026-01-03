@@ -1,0 +1,14 @@
+# ToolMonsters - robots.txt
+
+User-agent: *
+Allow: /
+
+# Sitemap (Tu changeras l'URL quand tu auras ton domaine)
+Sitemap: https://toolmonsters.onrender.com/sitemap.xml
+
+# Block common bad bots (optionnel)
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
