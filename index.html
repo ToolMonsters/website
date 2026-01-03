@@ -61,18 +61,45 @@
 
         /* --- HERO SECTION --- */
         .hero {
-            min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 0 8%;
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            padding: 0 8%;
             background: url('images/background.png');
-            background-size: cover; background-position: center; position: relative;
+            background-size: cover; 
+            background-position: center; 
+            position: relative;
         }
         .hero::before { display: none; }
-        .hero-content { position: relative; z-index: 2; width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 80px; }
+        .hero-content { 
+            position: relative; 
+            z-index: 2; 
+            width: 100%; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 80px; 
+        }
         .text-block { flex: 1; max-width: 600px; }
         h1 { font-size: 7.5rem; line-height: 0.85; color: white; letter-spacing: 2px; }
         .hero p { font-size: 1.5rem; font-weight: 300; margin-top: 20px; color: white; letter-spacing: 1px; }
 
         .btn-group { display: flex; gap: 20px; margin-top: 40px; }
-        .btn { padding: 18px 35px; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; transition: 0.2s; border: 2px solid white; text-decoration: none; }
+        .btn { 
+            padding: 18px 35px; 
+            font-family: 'Montserrat', sans-serif; 
+            font-weight: 700; 
+            font-size: 0.9rem; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            transition: 0.2s; 
+            border: 2px solid white; 
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            box-sizing: border-box;
+        }
         .btn-primary { background: white; color: black; } 
         .btn-primary:hover { background: var(--accent-red); border-color: var(--accent-red); color: white; }
         .btn-secondary { background: transparent; color: white; } 
@@ -81,7 +108,9 @@
         .image-block { flex: 1.2; display: flex; justify-content: flex-end; position: relative; height: 500px; }
         .monster-container { position: relative; width: 100%; max-width: 1100px; height: 100%; }
         .monster-img { position: absolute; top: 50%; right: 0; transform: translateY(-50%); width: 100%; height: auto; transition: opacity 0.5s ease-in-out; filter: none; }
-        .monster-img.original { opacity: 1; z-index: 1; } .monster-img.hover-version { opacity: 0; z-index: 2; } .monster-container:hover .hover-version { opacity: 1; }
+        .monster-img.original { opacity: 1; z-index: 1; } 
+        .monster-img.hover-version { opacity: 0; z-index: 2; } 
+        .monster-container:hover .hover-version { opacity: 1; }
 
         .partners-bar { position: relative; z-index: 3; width: 100%; padding-bottom: 40px; overflow: hidden; }
         .logo-slider { display: flex; align-items: center; width: max-content; animation: scroll 45s linear infinite; }
@@ -128,7 +157,7 @@
 
         .quote-icon {
             font-family: 'VT323', monospace;
-            font-size: 2.5rem;
+            font-size: 1.8rem;
             line-height: 1.4;
             margin-bottom: 20px;
             display: inline-block;
@@ -222,6 +251,7 @@
             transition: all 0.3s;
             flex-shrink: 0;
             line-height: 1;
+            padding: 0;
         }
 
         .carousel-arrow:hover {
@@ -319,6 +349,7 @@
             letter-spacing: 2px;
             text-decoration: none;
             transition: all 0.3s;
+            box-sizing: border-box;
         }
 
         .substack-btn:hover {
@@ -411,6 +442,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            box-sizing: border-box;
         }
 
         .social-btn:hover {
@@ -524,15 +556,17 @@
         }
 
         .faq-question::after {
-            content: '[ + ]';
-            font-family: 'VT323', monospace;
+            content: '+';
+            font-family: Arial, sans-serif;
             color: var(--accent-red);
-            font-size: 2rem;
+            font-size: 3rem;
+            font-weight: 300;
+            line-height: 1;
             transition: 0.3s;
         }
 
         .faq-item.active .faq-question::after {
-            content: '[ - ]';
+            content: '+';
         }
 
         .faq-answer {
@@ -555,65 +589,193 @@
 
         /* --- RESPONSIVE MOBILE OPTIMIZATIONS --- */
         @media (max-width: 1100px) { 
-            h1 { font-size: 4.5rem; }
-            .hero p { font-size: 1.2rem; }
-            .hero-content { flex-direction: column; text-align: center; }
-            .text-block { max-width: 100%; }
-            .btn-group { flex-direction: column; width: 100%; }
-            .btn { width: 100%; text-align: center; }
-            .image-block { height: 350px; margin-top: 40px; justify-content: center; } 
-            .monster-img { max-width: 450px; left: 50%; transform: translate(-50%, -50%); }
-            .monster-container { max-width: 450px; margin: 0 auto; }
+            /* Hero optimizations - TITRE PLUS GROS */
+            h1 { font-size: 4.5rem; line-height: 1; }
+            .hero { 
+                min-height: auto; 
+                padding: 60px 5% 40px 5%;
+            }
+            .hero p { font-size: 1.1rem; margin-top: 15px; }
+            .hero-content { 
+                flex-direction: column; 
+                text-align: center; 
+                margin-bottom: 40px;
+                gap: 30px;
+            }
+            .text-block { 
+                max-width: 100%; 
+                order: 1;
+            }
+            .btn-group { 
+                flex-direction: column; 
+                width: 100%; 
+                gap: 15px;
+                max-width: 400px;
+                margin: 30px auto 0 auto;
+            }
+            .btn { 
+                width: 100%; 
+                text-align: center; 
+                padding: 18px 25px;
+                font-size: 0.95rem;
+                display: block;
+                min-height: 56px;
+                line-height: 1.4;
+            }
+            .image-block { 
+                height: 300px; 
+                margin-top: 0;
+                justify-content: center;
+                order: 2;
+                width: 100%;
+            } 
+            .monster-container { 
+                max-width: 350px; 
+                margin: 0 auto;
+                height: 300px;
+            }
+            .monster-img { 
+                max-width: 100%; 
+                left: 50%; 
+                right: auto;
+                transform: translate(-50%, -50%); 
+            }
+            
+            /* Partners bar mobile */
+            .partners-bar { 
+                padding-bottom: 30px; 
+                margin-top: 30px;
+            }
+            .logo-slider img { 
+                width: 80px; 
+                height: 25px; 
+                margin: 0 25px; 
+            }
             
             /* Gallery mobile */
             .gallery-container { flex-direction: column; gap: 20px; }
-            .carousel-arrow { font-size: 4rem; }
+            .carousel-arrow { font-size: 4rem; padding: 10px; }
             .gallery-page { grid-template-columns: 1fr; }
-            .gallery-title { font-size: 3rem; margin-bottom: 40px; }
+            .gallery-title { font-size: 2.5rem; margin-bottom: 40px; }
             .gallery-img-box { height: 200px; }
+            .gallery-card { padding: 20px 10px; }
             .gallery-card h3 { font-size: 1.8rem; }
+            .gallery-card p { font-size: 0.95rem; }
             
             /* Testimonials mobile */
             .testimonials-container { grid-template-columns: 1fr; }
             .testimonials-title { font-size: 2.5rem; }
+            .testimonials-section { padding: 60px 5%; }
             .testimonial-card { padding: 30px 20px; }
             .quote-icon { font-size: 1.8rem; }
             
             /* Services mobile */
             .services-grid { grid-template-columns: 1fr; }
+            .grid-section { padding: 60px 5%; }
+            .service-card { padding: 30px 20px; }
             
             /* Contact mobile */
-            .contact-section h2 { font-size: 3rem; }
+            .contact-section h2 { font-size: 2.5rem; }
+            .contact-section .sub { font-size: 1.2rem; }
             .options-grid { grid-template-columns: 1fr; }
             .input-field { font-size: 1rem; }
+            .submit-btn { font-size: 1.5rem; padding: 15px; }
             
             /* FAQ mobile */
+            .faq-section { padding: 60px 5%; }
             .faq-title { font-size: 2.5rem; }
-            .faq-question { font-size: 1.5rem; padding: 20px; }
-            .faq-answer { font-size: 0.95rem; }
+            .faq-subtitle { font-size: 1rem; }
+            .faq-question { font-size: 1.4rem; padding: 20px 15px; }
+            .faq-answer { font-size: 0.95rem; padding: 0 15px; }
+            .faq-item.active .faq-answer { padding: 0 15px 20px 15px; }
             
             /* Footer mobile */
+            footer { padding: 60px 5% 30px 5%; }
             .footer-brand { font-size: 2.5rem; }
-            .footer-socials { flex-direction: column; width: 100%; }
-            .social-btn { width: 100%; justify-content: center; }
+            .footer-socials { 
+                flex-direction: column; 
+                width: 100%;
+                max-width: 400px;
+                margin: 0 auto;
+            }
+            .social-btn { 
+                width: 100%; 
+                justify-content: center;
+                min-height: 56px;
+                padding: 18px 30px;
+                font-size: 0.9rem;
+            }
+            
+            /* Hero break mobile */
+            .hero-break { padding: 60px 5%; }
             
             /* Substack button mobile */
-            .substack-btn { width: 90%; padding: 15px 20px; font-size: 0.9rem; }
+            .substack-btn { 
+                width: 100%;
+                max-width: 400px;
+                padding: 18px 30px; 
+                font-size: 0.95rem;
+                min-height: 56px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            /* Titre encore plus visible sur tablettes */
+            h1 { font-size: 4rem; }
+            .hero p { font-size: 1rem; }
+            .image-block { height: 250px; }
+            .monster-container { 
+                max-width: 280px;
+                height: 250px;
+            }
+            .btn { 
+                padding: 16px 20px;
+                font-size: 0.9rem;
+            }
+            .social-btn {
+                padding: 16px 25px;
+                font-size: 0.85rem;
+            }
+            .substack-btn {
+                padding: 16px 25px;
+                font-size: 0.9rem;
+            }
         }
 
         @media (max-width: 480px) {
-            h1 { font-size: 3.5rem; }
-            .hero { padding: 0 5%; }
-            .grid-section { padding: 60px 5%; }
-            .hero-break { padding: 60px 5%; }
-            .testimonials-section { padding: 60px 5%; }
-            .faq-section { padding: 60px 5%; }
-            footer { padding: 60px 5% 30px 5%; }
-            .gallery-title { font-size: 2.5rem; }
+            /* Titre optimisé pour petits écrans */
+            h1 { font-size: 3.2rem; }
+            .hero { padding: 40px 5% 30px 5%; }
+            .hero p { font-size: 0.95rem; }
+            .btn { 
+                padding: 16px 20px;
+                font-size: 0.85rem;
+                letter-spacing: 1px;
+            }
+            .image-block { height: 220px; }
+            .monster-container { 
+                max-width: 250px;
+                height: 220px;
+            }
+            .partners-bar { padding-bottom: 20px; margin-top: 20px; }
+            .logo-slider img { width: 70px; height: 22px; margin: 0 20px; }
+            .gallery-title { font-size: 2rem; }
+            .gallery-card h3 { font-size: 1.5rem; }
             .testimonials-title { font-size: 2rem; }
-            .contact-section h2 { font-size: 2.5rem; }
+            .contact-section h2 { font-size: 2rem; }
             .faq-title { font-size: 2rem; }
             .carousel-arrow { font-size: 3rem; }
+            .substack-btn { 
+                font-size: 0.8rem; 
+                padding: 16px 20px;
+            }
+            .social-btn {
+                padding: 16px 20px;
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
