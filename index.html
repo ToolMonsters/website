@@ -52,7 +52,7 @@
         :root { --accent-red: #FF0000; }
 
         /* --- CURSOR --- */
-        body, html, a, button, .service-card, .gallery-card, .monster-container, .option-btn, input, textarea, .faq-question, .social-btn {
+        body, html, a, button, .service-card, .gallery-card, .monster-container, .option-btn, input, textarea, .faq-question, .social-btn, .carousel-arrow {
             cursor: url("data:image/svg+xml,%3Csvg width='48' height='48' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0V22L6 16L10 24L14 22L10 14L18 14L0 0Z' fill='%23FF0000' stroke='white' stroke-width='1'/%3E%3C/svg%3E") 0 0, auto !important;
         }
 
@@ -189,54 +189,110 @@
         .card-link { font-family: 'VT323', monospace; text-transform: uppercase; color: white; text-decoration: none; font-size: 1.2rem; transition: 0.3s; }
         .service-card:hover .card-link { color: var(--accent-red); }
 
-        /* --- NOUVELLE SECTION GALERIE (3x2) --- */
+        /* --- CAROUSEL GALERIE --- */
         .hero-break {
             background: url('images/background2.png');
-            background-size: cover; background-position: center; position: relative;
-            border: none;
+            background-size: cover; 
+            background-position: center;
             padding: 100px 8%;
+            position: relative;
         }
         
         .gallery-title {
-            text-align: center; font-size: 5rem; margin-bottom: 60px; letter-spacing: 2px; text-shadow: none;
+            text-align: center; 
+            font-size: 5rem; 
+            margin-bottom: 60px; 
+            letter-spacing: 2px;
         }
 
-        .gallery-grid {
+        .gallery-container {
+            position: relative;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .carousel-arrow {
+            background: transparent;
+            border: none;
+            color: var(--accent-red);
+            font-size: 6rem;
+            transition: all 0.3s;
+            flex-shrink: 0;
+            line-height: 1;
+        }
+
+        .carousel-arrow:hover {
+            transform: scale(1.2);
+            text-shadow: 0 0 20px var(--accent-red);
+        }
+
+        .carousel-arrow:disabled {
+            opacity: 0.2;
+            cursor: not-allowed;
+        }
+
+        .carousel-arrow:disabled:hover {
+            transform: scale(1);
+            text-shadow: none;
+        }
+
+        .gallery-carousel {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .gallery-wrapper {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-page {
+            min-width: 100%;
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 15px;
-            max-width: 1200px; margin: 0 auto;
         }
 
         .gallery-card {
             background: transparent;
-            border: none;
             padding: 25px;
             text-align: center;
             transition: all 0.3s ease;
         }
 
         .gallery-card:hover {
-            border: none;
             transform: translateY(-5px);
         }
 
         .gallery-img-box {
-            width: 100%; height: 250px; overflow: hidden; margin-bottom: 25px;
-            border: none;
+            width: 100%; 
+            height: 250px; 
+            overflow: hidden; 
+            margin-bottom: 25px;
             transition: 0.3s;
         }
-        
-        .gallery-card:hover .gallery-img-box { border: none; }
 
         .gallery-img-box img {
-            width: 100%; height: 100%; object-fit: contain;
+            width: 100%; 
+            height: 100%; 
+            object-fit: contain;
             transition: transform 0.5s;
         }
 
-        .gallery-card:hover img { transform: scale(1.05); }
+        .gallery-card:hover img { 
+            transform: scale(1.05); 
+        }
 
-        .gallery-card h3 { font-size: 2.2rem; margin-bottom: 15px; letter-spacing: 1px; color: var(--accent-red); }
+        .gallery-card h3 { 
+            font-size: 2.2rem; 
+            margin-bottom: 15px; 
+            letter-spacing: 1px; 
+            color: var(--accent-red); 
+        }
+
         .gallery-card p { 
             color: white; 
             font-size: 1rem; 
@@ -510,7 +566,9 @@
             .monster-container { max-width: 450px; margin: 0 auto; }
             
             /* Gallery mobile */
-            .gallery-grid { grid-template-columns: 1fr; }
+            .gallery-container { flex-direction: column; gap: 20px; }
+            .carousel-arrow { font-size: 4rem; }
+            .gallery-page { grid-template-columns: 1fr; }
             .gallery-title { font-size: 3rem; margin-bottom: 40px; }
             .gallery-img-box { height: 200px; }
             .gallery-card h3 { font-size: 1.8rem; }
@@ -555,6 +613,7 @@
             .testimonials-title { font-size: 2rem; }
             .contact-section h2 { font-size: 2.5rem; }
             .faq-title { font-size: 2rem; }
+            .carousel-arrow { font-size: 3rem; }
         }
     </style>
 </head>
@@ -616,57 +675,93 @@
 
     <section class="hero-break">
         <h2 class="gallery-title">SOME TEMPLATES.</h2>
-        <div class="gallery-grid">
+        
+        <div class="gallery-container">
+            <!-- Flèche gauche -->
+            <button class="carousel-arrow" id="prevBtn" onclick="moveCarousel(-1)">←</button>
             
-            <div class="gallery-card" onclick="playClick(); window.open('https://yonathantoolmonsters.substack.com/p/find-every-new-decision-maker-at', '_blank');">
-                <div class="gallery-img-box">
-                    <img src="images/temp1.png" alt="First Mover Template - Find Decision Makers">
+            <!-- Carousel -->
+            <div class="gallery-carousel">
+                <div class="gallery-wrapper" id="galleryWrapper">
+                    
+                    <!-- PAGE 1 (4 premiers templates) -->
+                    <div class="gallery-page">
+                        <div class="gallery-card" onclick="playClick(); window.open('https://yonathantoolmonsters.substack.com/p/find-every-new-decision-maker-at', '_blank');">
+                            <div class="gallery-img-box">
+                                <img src="images/temp1.png" alt="First Mover Template">
+                            </div>
+                            <h3>FIRST MOVER</h3>
+                            <p>Find every new decision-maker at your<br>target accounts and sell them first.</p>
+                        </div>
+                        
+                        <div class="gallery-card" onclick="playClick(); window.open('https://yonathantoolmonsters.substack.com/p/turn-viral-youtube-videos-into-linkedin', '_blank');">
+                            <div class="gallery-img-box">
+                                <img src="images/temp2.png" alt="Content Engine Template">
+                            </div>
+                            <h3>CONTENT ENGINE</h3>
+                            <p>Turn viral YouTube videos into<br>LinkedIn posts (100% Automated).</p>
+                        </div>
+                        
+                        <div class="gallery-card" onclick="playClick(); window.open('https://yonathantoolmonsters.substack.com/p/how-to-auto-generate-personalized', '_blank');">
+                            <div class="gallery-img-box">
+                                <img src="images/temp3.png" alt="Smart Decks Template">
+                            </div>
+                            <h3>SMART DECKS</h3>
+                            <p>Auto-generate personalized sales<br>decks from any Website.</p>
+                        </div>
+                        
+                        <div class="gallery-card" onclick="playClick(); window.open('https://yonathantoolmonsters.substack.com/p/qualify-100-leads-in-10-seconds-with', '_blank');">
+                            <div class="gallery-img-box">
+                                <img src="images/temp6.png" alt="Instant Qualify Template">
+                            </div>
+                            <h3>INSTANT QUALIFY</h3>
+                            <p>Qualify 100 leads in 10 seconds<br>with Notion AI.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- PAGE 2 (4 templates suivants) -->
+                    <div class="gallery-page">
+                        <div class="gallery-card" onclick="playClick(); window.open('https://yonathantoolmonsters.substack.com/p/how-to-find-viral-content-from-reddit', '_blank');">
+                            <div class="gallery-img-box">
+                                <img src="images/temp5.png" alt="Viral Scout Template">
+                            </div>
+                            <h3>VIRAL SCOUT</h3>
+                            <p>Find viral content from Reddit<br>on autopilot.</p>
+                        </div>
+                        
+                        <div class="gallery-card" onclick="playClick(); window.open('https://yonathantoolmonsters.substack.com/p/how-to-book-meeting-with-nano-banana', '_blank');">
+                            <div class="gallery-img-box">
+                                <img src="images/temp4.png" alt="Nano-Banana Template">
+                            </div>
+                            <h3>MEETING GUIDE NANO-BANANA</h3>
+                            <p>Turn any LinkedIn profile into an epic movie<br>poster automatically. Perfect for fun outreach.</p>
+                        </div>
+                        
+                        <div class="gallery-card" onclick="playClick(); window.open('#', '_blank');">
+                            <div class="gallery-img-box">
+                                <img src="images/temp7.png" alt="Viral Carousels Template">
+                            </div>
+                            <h3>VIRAL CAROUSELS</h3>
+                            <p>Auto-generate viral carousels from<br>top Reddit posts with Gamma.</p>
+                        </div>
+                        
+                        <div class="gallery-card" onclick="playClick(); window.open('#', '_blank');">
+                            <div class="gallery-img-box">
+                                <img src="images/temp8.png" alt="Decision Finder Template">
+                            </div>
+                            <h3>DECISION FINDER</h3>
+                            <p>Auto-find decision-makers from<br>any company domain.</p>
+                        </div>
+                    </div>
+                    
                 </div>
-                <h3>FIRST MOVER</h3>
-                <p>Find every new decision-maker at your<br>target accounts and sell them first.</p>
-            </div>
-            <div class="gallery-card" onclick="playClick(); window.open('https://yonathantoolmonsters.substack.com/p/turn-viral-youtube-videos-into-linkedin', '_blank');">
-                <div class="gallery-img-box">
-                    <img src="images/temp2.png" alt="Content Engine Template - YouTube to LinkedIn">
-                </div>
-                <h3>CONTENT ENGINE</h3>
-                <p>Turn viral YouTube videos into<br>LinkedIn posts (100% Automated).</p>
-            </div>
-
-            <div class="gallery-card" onclick="playClick(); window.open('https://yonathantoolmonsters.substack.com/p/how-to-auto-generate-personalized', '_blank');">
-                <div class="gallery-img-box">
-                    <img src="images/temp3.png" alt="Smart Decks Template - Auto Sales Decks">
-                </div>
-                <h3>SMART DECKS</h3>
-                <p>Auto-generate personalized sales<br>decks from any Website.</p>
-            </div>
-            <div class="gallery-card" onclick="playClick(); window.open('https://yonathantoolmonsters.substack.com/p/qualify-100-leads-in-10-seconds-with', '_blank');">
-                <div class="gallery-img-box">
-                    <img src="images/temp6.png" alt="Instant Qualify Template - Lead Qualification">
-                </div>
-                <h3>INSTANT QUALIFY</h3>
-                <p>Qualify 100 leads in 10 seconds<br>with Notion AI.</p>
-            </div>
-
-            <div class="gallery-card" onclick="playClick(); window.open('https://yonathantoolmonsters.substack.com/p/how-to-find-viral-content-from-reddit', '_blank');">
-                <div class="gallery-img-box">
-                    <img src="images/temp5.png" alt="Viral Scout Template - Reddit Content Finder">
-                </div>
-                <h3>VIRAL SCOUT</h3>
-                <p>Find viral content from Reddit<br>on autopilot.</p>
             </div>
             
-            <div class="gallery-card" onclick="playClick(); window.open('https://yonathantoolmonsters.substack.com/p/how-to-book-meeting-with-nano-banana', '_blank');">
-                <div class="gallery-img-box">
-                    <img src="images/temp4.png" alt="Nano-Banana Template - LinkedIn to Movie Poster">
-                </div>
-                <h3>MEETING GUIDE NANO-BANANA</h3>
-                <p>Turn any LinkedIn profile into an epic movie<br>poster automatically. Perfect for fun outreach.</p>
-            </div>
-
+            <!-- Flèche droite -->
+            <button class="carousel-arrow" id="nextBtn" onclick="moveCarousel(1)">→</button>
         </div>
         
-        <!-- Bouton Substack centré -->
+        <!-- Bouton Substack -->
         <div class="substack-cta">
             <a href="https://yonathantoolmonsters.substack.com/subscribe" class="substack-btn" onclick="playClick()" target="_blank">Get All Templates</a>
         </div>
@@ -851,7 +946,29 @@
                     }
                 });
             });
+
+            // Désactiver la flèche gauche au chargement
+            document.getElementById('prevBtn').disabled = true;
         });
+
+        // CAROUSEL GALLERY
+        let currentPage = 0;
+        const totalPages = 2;
+
+        function moveCarousel(direction) {
+            playClick();
+            currentPage += direction;
+            
+            if (currentPage < 0) currentPage = 0;
+            if (currentPage >= totalPages) currentPage = totalPages - 1;
+            
+            const wrapper = document.getElementById('galleryWrapper');
+            wrapper.style.transform = `translateX(-${currentPage * 100}%)`;
+            
+            // Désactiver les boutons aux limites
+            document.getElementById('prevBtn').disabled = (currentPage === 0);
+            document.getElementById('nextBtn').disabled = (currentPage === totalPages - 1);
+        }
     </script>
 </body>
 </html>
