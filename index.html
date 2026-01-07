@@ -591,6 +591,121 @@
             padding: 0 35px 25px 35px;
         }
 
+        /* --- AI TWIN BUTTON & POPUP --- */
+        .ai-twin-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 9998;
+            background: var(--accent-red);
+            border: 2px solid white;
+            color: white;
+            padding: 18px 30px;
+            font-family: 'VT323', monospace;
+            font-size: 1.3rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+            box-shadow: 0 5px 20px rgba(255, 0, 0, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        .ai-twin-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.8);
+            background: white;
+            color: var(--accent-red);
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 5px 20px rgba(255, 0, 0, 0.5); }
+            50% { box-shadow: 0 5px 30px rgba(255, 0, 0, 0.8); }
+        }
+
+        .ai-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .ai-popup-overlay.active {
+            display: flex;
+        }
+
+        .ai-popup-content {
+            position: relative;
+            background: #050505;
+            border: 4px solid var(--accent-red);
+            box-shadow: 0 0 40px var(--accent-red);
+            padding: 20px;
+            max-width: 760px;
+            width: 90%;
+            animation: popupAppear 0.3s ease;
+        }
+
+        @keyframes popupAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .ai-popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--accent-red);
+        }
+
+        .ai-popup-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            color: white;
+            letter-spacing: 2px;
+        }
+
+        .ai-popup-close {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+            font-size: 1.5rem;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            font-family: Arial, sans-serif;
+            line-height: 1;
+        }
+
+        .ai-popup-close:hover {
+            background: var(--accent-red);
+            border-color: var(--accent-red);
+            transform: rotate(90deg);
+        }
+
+        .ai-popup-iframe {
+            width: 100%;
+            height: 480px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: #000;
+        }
+
         /* --- RESPONSIVE MOBILE OPTIMIZATIONS --- */
         @media (max-width: 1100px) { 
             /* Hero optimizations - TITRE PLUS GROS */
@@ -724,6 +839,27 @@
                 align-items: center;
                 justify-content: center;
             }
+
+            /* AI Twin mobile */
+            .ai-twin-btn {
+                bottom: 20px;
+                right: 20px;
+                padding: 15px 25px;
+                font-size: 1.1rem;
+            }
+            
+            .ai-popup-content {
+                width: 95%;
+                padding: 15px;
+            }
+            
+            .ai-popup-iframe {
+                height: 400px;
+            }
+            
+            .ai-popup-title {
+                font-size: 1.5rem;
+            }
         }
 
         @media (max-width: 768px) {
@@ -779,6 +915,18 @@
             .social-btn {
                 padding: 16px 20px;
                 font-size: 0.8rem;
+            }
+
+            /* AI Twin petit écran */
+            .ai-twin-btn {
+                padding: 12px 20px;
+                font-size: 1rem;
+                bottom: 15px;
+                right: 15px;
+            }
+            
+            .ai-popup-iframe {
+                height: 350px;
             }
         }
     </style>
@@ -1041,6 +1189,26 @@
         </div>
     </footer>
 
+    <!-- AI Twin Button -->
+    <button class="ai-twin-btn" onclick="openAIPopup()">
+        [ Talk to my AI twin ]
+    </button>
+
+    <!-- AI Popup -->
+    <div class="ai-popup-overlay" id="aiPopup">
+        <div class="ai-popup-content">
+            <div class="ai-popup-header">
+                <div class="ai-popup-title">[ AI TWIN ACTIVE ]</div>
+                <button class="ai-popup-close" onclick="closeAIPopup()">×</button>
+            </div>
+            <iframe
+                class="ai-popup-iframe"
+                src="https://lab.anam.ai/frame/PSqfQjANgnaLtJkWdNsUR"
+                allow="microphone"
+            ></iframe>
+        </div>
+    </div>
+
     <script>
         const clickSound = document.getElementById('click-sound');
         function playClick() { clickSound.currentTime = 0; clickSound.play(); }
@@ -1136,6 +1304,33 @@
             document.getElementById('prevBtn').disabled = (currentPage === 0);
             document.getElementById('nextBtn').disabled = (currentPage === totalPages - 1);
         }
+
+        // AI Twin Popup Functions
+        function openAIPopup() {
+            playClick();
+            document.getElementById('aiPopup').classList.add('active');
+            document.body.style.overflow = 'hidden'; // Empêche le scroll
+        }
+
+        function closeAIPopup() {
+            playClick();
+            document.getElementById('aiPopup').classList.remove('active');
+            document.body.style.overflow = 'auto'; // Réactive le scroll
+        }
+
+        // Fermer avec la touche Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeAIPopup();
+            }
+        });
+
+        // Fermer en cliquant sur l'overlay
+        document.getElementById('aiPopup').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAIPopup();
+            }
+        });
     </script>
 </body>
 </html>
