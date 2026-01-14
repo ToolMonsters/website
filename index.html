@@ -1211,127 +1211,171 @@
     </div>
 
     <script>
-        const clickSound = document.getElementById('click-sound');
-        function playClick() { clickSound.currentTime = 0; clickSound.play(); }
-        
-        function toggleOption(btn) {
-            playClick();
-            document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            document.getElementById('service_type').value = btn.getAttribute('data-service');
-        }
+    const clickSound = document.getElementById('click-sound');
+    function playClick() { 
+        clickSound.currentTime = 0; 
+        clickSound.play().catch(e => console.log('Audio play failed')); 
+    }
+    
+    function toggleOption(btn) {
+        playClick();
+        document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('service_type').value = btn.getAttribute('data-service');
+    }
 
-        // Gestion du formulaire EmailJS
-        document.getElementById('contactForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            playClick();
-            
-            const submitBtn = this.querySelector('.submit-btn');
-            const formMessage = document.getElementById('form-message');
-            const serviceType = document.getElementById('service_type').value;
-            
-            if (!serviceType) {
-                formMessage.textContent = '[ ERROR ] Please select a service type';
+    // ✅ FORMULAIRE CORRIGÉ - Gestion EmailJS
+    document.getElementById('contactForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        playClick();
+        
+        const submitBtn = this.querySelector('.submit-btn');
+        const formMessage = document.getElementById('form-message');
+        const serviceType = document.getElementById('service_type').value;
+        
+        // Validation du service
+        if (!serviceType) {
+            formMessage.textContent = '[ ERROR ] Please select a service type';
+            formMessage.className = 'error';
+            formMessage.style.display = 'block';
+            return;
+        }
+        
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'SENDING...';
+        formMessage.style.display = 'none';
+        
+        // ✅ Utilisation de emailjs.send() avec toutes les variables nécessaires
+        const templateParams = {
+            title: serviceType,           // Pour {{title}} dans le Subject
+            service_type: serviceType,    // Pour {{service_type}} dans le corps
+            from_name: this.querySelector('[name="from_name"]').value,
+            from_email: this.querySelector('[name="from_email"]').value,
+            message: this.querySelector('[name="message"]').value,
+            time: new Date().toLocaleString() // Pour {{time}}
+        };
+        
+        console.log('📤 Envoi avec les paramètres:', templateParams);
+        
+        emailjs.send('service_ijg1jin', 'template_2ep6wxo', templateParams)
+            .then(function(response) {
+                console.log('✅ SUCCÈS!', response.status, response.text);
+                
+                formMessage.textContent = '[ TRANSMISSION SUCCESSFUL ] Message sent! We\'ll get back to you soon.';
+                formMessage.className = 'success';
+                formMessage.style.display = 'block';
+                
+                // Reset du formulaire
+                document.getElementById('contactForm').reset();
+                document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('active'));
+                document.getElementById('service_type').value = '';
+                
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'SEND DATA';
+                
+                // Auto-hide après 5 secondes
+                setTimeout(() => {
+                    formMessage.style.display = 'none';
+                }, 5000);
+            })
+            .catch(function(error) {
+                console.error('❌ ERREUR EmailJS:', error);
+                console.error('Détails:', {
+                    status: error.status,
+                    text: error.text,
+                    message: error.message
+                });
+                
+                let errorMsg = '[ TRANSMISSION FAILED ] ';
+                
+                if (error.status === 412) {
+                    errorMsg += 'Configuration error. Check template variables.';
+                } else if (error.status === 400) {
+                    errorMsg += 'Invalid data format.';
+                } else if (error.status === 422) {
+                    errorMsg += 'Missing required fields.';
+                } else {
+                    errorMsg += 'Something went wrong. Please try again.';
+                }
+                
+                formMessage.textContent = errorMsg;
                 formMessage.className = 'error';
                 formMessage.style.display = 'block';
-                return;
-            }
-            
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'SENDING...';
-            
-            emailjs.sendForm('service_ijg1jin', 'template_2ep6wxo', this)
-                .then(function() {
-                    formMessage.textContent = '[ TRANSMISSION SUCCESSFUL ] Message sent! We\'ll get back to you soon.';
-                    formMessage.className = 'success';
-                    formMessage.style.display = 'block';
-                    
-                    document.getElementById('contactForm').reset();
-                    document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('active'));
-                    
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'SEND DATA';
-                }, function(error) {
-                    formMessage.textContent = '[ TRANSMISSION FAILED ] Something went wrong. Please try again.';
-                    formMessage.className = 'error';
-                    formMessage.style.display = 'block';
-                    
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'SEND DATA';
-                    
-                    console.error('EmailJS Error:', error);
-                });
-        });
-
-        // FAQ Accordion
-        document.addEventListener('DOMContentLoaded', function() {
-            const faqQuestions = document.querySelectorAll('.faq-question');
-            
-            faqQuestions.forEach(question => {
-                question.addEventListener('click', function() {
-                    playClick();
-                    const faqItem = this.parentElement;
-                    const isActive = faqItem.classList.contains('active');
-                    
-                    document.querySelectorAll('.faq-item').forEach(item => {
-                        item.classList.remove('active');
-                    });
-                    
-                    if (!isActive) {
-                        faqItem.classList.add('active');
-                    }
-                });
+                
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'SEND DATA';
             });
+    });
 
-            // Désactiver la flèche gauche au chargement
-            document.getElementById('prevBtn').disabled = true;
+    // FAQ Accordion
+    document.addEventListener('DOMContentLoaded', function() {
+        const faqQuestions = document.querySelectorAll('.faq-question');
+        
+        faqQuestions.forEach(question => {
+            question.addEventListener('click', function() {
+                playClick();
+                const faqItem = this.parentElement;
+                const isActive = faqItem.classList.contains('active');
+                
+                document.querySelectorAll('.faq-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                if (!isActive) {
+                    faqItem.classList.add('active');
+                }
+            });
         });
 
-        // CAROUSEL GALLERY
-        let currentPage = 0;
-        const totalPages = 2;
+        // Désactiver la flèche gauche au chargement
+        document.getElementById('prevBtn').disabled = true;
+    });
 
-        function moveCarousel(direction) {
-            playClick();
-            currentPage += direction;
-            
-            if (currentPage < 0) currentPage = 0;
-            if (currentPage >= totalPages) currentPage = totalPages - 1;
-            
-            const wrapper = document.getElementById('galleryWrapper');
-            wrapper.style.transform = `translateX(-${currentPage * 100}%)`;
-            
-            // Désactiver les boutons aux limites
-            document.getElementById('prevBtn').disabled = (currentPage === 0);
-            document.getElementById('nextBtn').disabled = (currentPage === totalPages - 1);
+    // CAROUSEL GALLERY
+    let currentPage = 0;
+    const totalPages = 2;
+
+    function moveCarousel(direction) {
+        playClick();
+        currentPage += direction;
+        
+        if (currentPage < 0) currentPage = 0;
+        if (currentPage >= totalPages) currentPage = totalPages - 1;
+        
+        const wrapper = document.getElementById('galleryWrapper');
+        wrapper.style.transform = `translateX(-${currentPage * 100}%)`;
+        
+        // Désactiver les boutons aux limites
+        document.getElementById('prevBtn').disabled = (currentPage === 0);
+        document.getElementById('nextBtn').disabled = (currentPage === totalPages - 1);
+    }
+
+    // AI Twin Popup Functions
+    function openAIPopup() {
+        playClick();
+        document.getElementById('aiPopup').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeAIPopup() {
+        playClick();
+        document.getElementById('aiPopup').classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+
+    // Fermer avec la touche Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeAIPopup();
         }
+    });
 
-        // AI Twin Popup Functions
-        function openAIPopup() {
-            playClick();
-            document.getElementById('aiPopup').classList.add('active');
-            document.body.style.overflow = 'hidden'; // Empêche le scroll
+    // Fermer en cliquant sur l'overlay
+    document.getElementById('aiPopup').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeAIPopup();
         }
-
-        function closeAIPopup() {
-            playClick();
-            document.getElementById('aiPopup').classList.remove('active');
-            document.body.style.overflow = 'auto'; // Réactive le scroll
-        }
-
-        // Fermer avec la touche Escape
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeAIPopup();
-            }
-        });
-
-        // Fermer en cliquant sur l'overlay
-        document.getElementById('aiPopup').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeAIPopup();
-            }
-        });
-    </script>
+    });
+</script>
 </body>
 </html>
